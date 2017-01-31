@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -57,6 +59,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -165,6 +168,7 @@ public class Camera2BasicFragment extends Fragment
      * An {@link AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
+    private ImageView imageView;
 
     /**
      * A {@link CameraCaptureSession } for camera preview.
@@ -243,7 +247,8 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            closeCamera();
+            mBackgroundHandler.post(new ImageSaver(imageView, mFile,getActivity()));
         }
 
     };
@@ -429,6 +434,7 @@ public class Camera2BasicFragment extends Fragment
         view.findViewById(R.id.picture).setOnClickListener(this);
         view.findViewById(R.id.info).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        imageView = (ImageView) view.findViewById(R.id.imageView);
     }
 
     @Override
@@ -828,8 +834,7 @@ public class Camera2BasicFragment extends Fragment
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
 
-            CameraCaptureSession.CaptureCallback CaptureCallback
-                    = new CameraCaptureSession.CaptureCallback() {
+            CameraCaptureSession.CaptureCallback CaptureCallback = new CameraCaptureSession.CaptureCallback() {
 
                 @Override
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
@@ -838,6 +843,7 @@ public class Camera2BasicFragment extends Fragment
                     showToast("Saved: " + mFile);
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
+
                 }
             };
 
@@ -918,19 +924,30 @@ public class Camera2BasicFragment extends Fragment
         /**
          * The JPEG image
          */
-        private final Image mImage;
+        private final ImageView mImageView;
         /**
          * The file we save the image into.
          */
         private final File mFile;
+        private Activity mActivity;
 
-        public ImageSaver(Image image, File file) {
-            mImage = image;
+        public ImageSaver(ImageView image, File file, Activity activity) {
+            mImageView = image;
             mFile = file;
+            mActivity = activity;
         }
 
         @Override
         public void run() {
+            final Bitmap myBitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath());
+            int width = myBitmap.getWidth();
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mImageView.setImageBitmap(myBitmap);
+                }
+            });
+            /*
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
@@ -950,6 +967,7 @@ public class Camera2BasicFragment extends Fragment
                     }
                 }
             }
+            */
         }
 
     }
