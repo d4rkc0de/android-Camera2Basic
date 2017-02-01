@@ -75,6 +75,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/abdelnacer/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
+        <dex dex="/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/pre-dexed/debug/bolts-applinks-1.4.0_afe850b733c00eacaa1ae8847dd00550be7bbc03.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.0.1/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -138,6 +147,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/abdelnacer/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/pre-dexed/debug/bolts-tasks-1.4.0_3978fddd75338d4e29a219d13fd204a379079a7d.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/abdelnacer/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.1/support-annotations-25.0.1.jar"
         jumboMode="false"
         optimize="true"
@@ -171,6 +189,15 @@
         revision="25.0.2"
         sha1="1108575c7dc7b7f5b378b3290ac90de81a9b8830">
         <dex dex="/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/pre-dexed/debug/com.android.support-cardview-v7-25.0.1_4a4977d5ad9e3ec2d4ded3bdaddd6f9f926c699b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/abdelnacer/.gradle/caches/modules-2/files-2.1/com.parse/parse-android/1.13.1/5f645bf60e3b88ccc02bd2a4018c5e3ef2f77d0a/parse-android-1.13.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="5f645bf60e3b88ccc02bd2a4018c5e3ef2f77d0a">
+        <dex dex="/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/pre-dexed/debug/parse-android-1.13.1_c310320fb32a77857d6f22e048b9456eb21074f5.jar" />
     </item>
     <item
         is-multidex="false"

@@ -64,6 +64,10 @@
         "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/notification_media_action.xml"
     },
     {
+        "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout/fragment_camera2_basic_front.xml",
+        "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/res/layout/fragment_camera2_basic_front.xml"
+    },
+    {
         "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout/notification_template_part_time.xml",
         "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/notification_template_part_time.xml"
     },
@@ -102,6 +106,10 @@
     {
         "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout/abc_action_menu_layout.xml",
         "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/layout/abc_action_menu_layout.xml"
+    },
+    {
+        "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout/activity_camera_front.xml",
+        "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/res/layout/activity_camera_front.xml"
     },
     {
         "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout/abc_screen_toolbar.xml",

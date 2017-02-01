@@ -17,7 +17,10 @@
 package com.example.android.camera2basic;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 public class CameraActivity extends Activity {
 
@@ -30,6 +33,14 @@ public class CameraActivity extends Activity {
                     .replace(R.id.container, Camera2BasicFragment.newInstance())
                     .commit();
         }
+        Button flipButton = (Button) findViewById(R.id.flip);
+        flipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CameraActivity.this,CameraActivityFront.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
     }
 
 }

@@ -1,24 +1,32 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:18:1-40:12
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:16:1-46:12
 	package
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:19:5-47
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:17:5-47
 	xmlns:android
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:18:11-69
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:16:11-69
 uses-permission#android.permission.CAMERA
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:21:5-65
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:19:5-65
 	android:name
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:21:22-62
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:19:22-62
 uses-feature#android.hardware.camera
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:23:5-60
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:20:5-60
 	android:name
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:23:19-57
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:20:19-57
 uses-feature#android.hardware.camera.autofocus
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:24:5-70
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:21:5-70
 	android:name
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:24:19-67
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:21:19-67
+uses-permission#android.permission.INTERNET
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:22:5-67
+	android:name
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:22:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:23:5-79
+	android:name
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:23:22-76
 application
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:26:5-38:19
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:25:5-44:19
 MERGED from [com.android.support:support-v13:25.0.1] /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/support-v13/25.0.1/AndroidManifest.xml:25:5-20
 MERGED from [com.android.support:cardview-v7:25.0.1] /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/cardview-v7/25.0.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:appcompat-v7:25.0.1] /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/AndroidManifest.xml:25:5-20
@@ -31,29 +39,41 @@ MERGED from [com.android.support:animated-vector-drawable:25.0.1] /Users/abdelna
 MERGED from [com.android.support:support-vector-drawable:25.0.1] /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.1/AndroidManifest.xml:23:5-20
 MERGED from [com.android.support:support-compat:25.0.1] /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/AndroidManifest.xml:25:5-20
 	android:label
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:27:9-41
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:29:9-41
 	android:allowBackup
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:26:18-44
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:27:9-35
 	android:icon
 		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:28:9-45
 	android:theme
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:29:9-45
-activity#com.example.android.camera2basic.CameraActivity
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:31:9-37:20
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:30:9-45
+	android:name
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:26:9-50
+meta-data#com.parse.APPLICATION_ID
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:31:9-33:52
+	android:value
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:33:13-49
+	android:name
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:32:13-52
+activity#com.example.android.camera2basic.CameraActivityFront
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:34:9-42:20
 	android:label
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:32:19-51
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:36:13-45
 	android:name
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:31:19-49
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:35:13-48
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:33:13-36:29
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:37:13-41:29
 action#android.intent.action.MAIN
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:34:17-69
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:38:17-69
 	android:name
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:34:25-66
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:38:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:35:17-77
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:40:17-77
 	android:name
-		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:35:27-74
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:40:27-74
+activity#com.example.android.camera2basic.CameraActivity
+ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:43:9-61
+	android:name
+		ADDED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml:43:19-49
 uses-sdk
 INJECTED from /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:support-v13:25.0.1] /Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/support-v13/25.0.1/AndroidManifest.xml:21:5-23:55

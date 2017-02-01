@@ -13,10 +13,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.camera2basic.CameraActivity">
+<FrameLayout
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
-    tools:context="com.example.android.camera2basic.CameraActivity" />
+    android:background="#000" />
+    <Button
+        android:id="@+id/flip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="40dp"
+        android:text="flip"/>
+</RelativeLayout>

@@ -22,10 +22,24 @@ public class CameraActivityTest {
     @Test
     public void cameraActivityTest() throws InterruptedException {
         ViewInteraction button = onView(
+                allOf(withId(R.id.flip), withText("flip"),
+                        isDisplayed()));
+        button.perform(click());
+
+        Thread.sleep(3000);
+
+        ViewInteraction button2 = onView(
+                allOf(withId(R.id.flip), withText("flip"),
+                        isDisplayed()));
+        button2.perform(click());
+
+        Thread.sleep(3000);
+
+        ViewInteraction button3 = onView(
                 allOf(withId(R.id.picture), withText("Picture"),
                         withParent(withId(R.id.control)),
                         isDisplayed()));
-        button.perform(click());
+        button3.perform(click());
     }
 
 }

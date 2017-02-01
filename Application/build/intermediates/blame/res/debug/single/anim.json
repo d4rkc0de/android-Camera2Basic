@@ -4,6 +4,10 @@
         "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/anim/abc_shrink_fade_out_from_bottom.xml"
     },
     {
+        "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/anim/fade_out.xml",
+        "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/res/anim/fade_out.xml"
+    },
+    {
         "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/anim/abc_slide_in_top.xml",
         "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/anim/abc_slide_in_top.xml"
     },
@@ -30,6 +34,10 @@
     {
         "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/anim/abc_slide_out_top.xml",
         "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/anim/fade_in.xml",
+        "source": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/res/anim/fade_in.xml"
     },
     {
         "merged": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/build/intermediates/res/merged/debug/anim/abc_fade_in.xml",

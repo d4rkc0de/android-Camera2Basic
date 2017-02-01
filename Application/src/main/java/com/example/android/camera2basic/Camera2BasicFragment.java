@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -33,6 +34,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -61,6 +63,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -168,7 +175,6 @@ public class Camera2BasicFragment extends Fragment
      * An {@link AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
-    private ImageView imageView;
 
     /**
      * A {@link CameraCaptureSession } for camera preview.
@@ -236,7 +242,7 @@ public class Camera2BasicFragment extends Fragment
     /**
      * This is the output file for our picture.
      */
-    private File mFile;
+    private static ImageView imageView;
 
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
@@ -247,8 +253,8 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(),getActivity()));
             closeCamera();
-            mBackgroundHandler.post(new ImageSaver(imageView, mFile,getActivity()));
         }
 
     };
@@ -387,7 +393,7 @@ public class Camera2BasicFragment extends Fragment
      * @return The optimal {@code Size}, or an arbitrary one if none were big enough
      */
     private static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
-            int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
+                                          int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
 
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<>();
@@ -399,7 +405,7 @@ public class Camera2BasicFragment extends Fragment
             if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
                     option.getHeight() == option.getWidth() * h / w) {
                 if (option.getWidth() >= textureViewWidth &&
-                    option.getHeight() >= textureViewHeight) {
+                        option.getHeight() >= textureViewHeight) {
                     bigEnough.add(option);
                 } else {
                     notBigEnough.add(option);
@@ -424,15 +430,13 @@ public class Camera2BasicFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_camera2_basic, container, false);
     }
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.picture).setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         imageView = (ImageView) view.findViewById(R.id.imageView);
     }
@@ -440,7 +444,6 @@ public class Camera2BasicFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     @Override
@@ -834,16 +837,14 @@ public class Camera2BasicFragment extends Fragment
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
 
-            CameraCaptureSession.CaptureCallback CaptureCallback = new CameraCaptureSession.CaptureCallback() {
+            CameraCaptureSession.CaptureCallback CaptureCallback
+                    = new CameraCaptureSession.CaptureCallback() {
 
                 @Override
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
                     unlockFocus();
-
                 }
             };
 
@@ -896,16 +897,6 @@ public class Camera2BasicFragment extends Fragment
                 takePicture();
                 break;
             }
-            case R.id.info: {
-                Activity activity = getActivity();
-                if (null != activity) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
-                break;
-            }
         }
     }
 
@@ -924,50 +915,56 @@ public class Camera2BasicFragment extends Fragment
         /**
          * The JPEG image
          */
-        private final ImageView mImageView;
+        private final Image mImage;
         /**
          * The file we save the image into.
          */
-        private final File mFile;
         private Activity mActivity;
 
-        public ImageSaver(ImageView image, File file, Activity activity) {
-            mImageView = image;
-            mFile = file;
+        public ImageSaver(Image image,Activity activity) {
+            mImage = image;
             mActivity = activity;
         }
 
         @Override
         public void run() {
-            final Bitmap myBitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath());
-            int width = myBitmap.getWidth();
+            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+            Resources res = mActivity.getResources();
+            BitmapDrawable bDrawable = new BitmapDrawable(res, bitmap);
+            int bitmapWidth = bDrawable.getIntrinsicWidth();
+            Log.d("bitmap",String.valueOf(bitmapWidth));
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mImageView.setImageBitmap(myBitmap);
+                    if(bitmap != null)
+                        imageView.setImageBitmap(bitmap);
                 }
             });
-            /*
-            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-            FileOutputStream output = null;
-            try {
-                output = new FileOutputStream(mFile);
-                output.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mImage.close();
-                if (null != output) {
-                    try {
-                        output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            final ParseFile file = new ParseFile("image.jpg", bytes);
+            file.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e!=null)
+                        Log.d("uploadd","uploaded error " + e.getMessage());
+                    else {
+                        ParseObject imgupload = new ParseObject("TestObject");
+                        imgupload.put("image", file);
+                        imgupload.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if(e == null) {
+                                    Log.d("uploadd","uploaded successfully");
+                                }
+                                else
+                                    Log.d("save","save error " + e.getMessage());
+                            }
+                        });
                     }
                 }
-            }
-            */
+            });
         }
 
     }
