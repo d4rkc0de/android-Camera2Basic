@@ -24,7 +24,6 @@ import android.widget.Button;
 
 public class CameraActivityFront extends Activity {
 
-    boolean facingCamera = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +39,6 @@ public class CameraActivityFront extends Activity {
             public void onClick(View view) {
                 startActivity(new Intent(CameraActivityFront.this,CameraActivity.class));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
             }
         });
     }

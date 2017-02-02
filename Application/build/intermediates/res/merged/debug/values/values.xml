@@ -1395,7 +1395,7 @@
     <style name="CardView.Light">
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
     </style>
-    <style name="MaterialTheme" parent="android:Theme.Material.Light.NoActionBar.Fullscreen"/>
+    <style name="MaterialTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
 

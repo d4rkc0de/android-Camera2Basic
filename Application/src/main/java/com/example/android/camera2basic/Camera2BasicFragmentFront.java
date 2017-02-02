@@ -29,9 +29,14 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
@@ -53,6 +58,7 @@ import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -61,6 +67,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -70,6 +77,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -243,7 +251,6 @@ public class Camera2BasicFragmentFront extends Fragment
     /**
      * This is the output file for our picture.
      */
-    private File mFile;
     private static ImageView imageView;
 
     /**
@@ -255,7 +262,7 @@ public class Camera2BasicFragmentFront extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile,getActivity()));
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mTextureView,getActivity()));
             closeCamera();
         }
 
@@ -447,7 +454,6 @@ public class Camera2BasicFragmentFront extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     @Override
@@ -924,32 +930,32 @@ public class Camera2BasicFragmentFront extends Fragment
         /**
          * The file we save the image into.
          */
-        private final File mFile;
         private Activity mActivity;
 
-        public ImageSaver(Image image, File file,Activity activity) {
+        public ImageSaver(Image image, TextureView textureView,Activity activity) {
             mImage = image;
-            mFile = file;
             mActivity = activity;
         }
 
         @Override
         public void run() {
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            Resources res=mActivity.getResources();
-            BitmapDrawable bDrawable = new BitmapDrawable(res, bitmap);
-            int bitmapWidth = bDrawable.getIntrinsicWidth();
-            Log.d("bitmap",String.valueOf(bitmapWidth));
+            byte[] bytes = new byte[buffer.capacity()];
+            buffer.get(bytes);
+
+            final Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(bitmap != null)
-                        imageView.setImageBitmap(bitmap);
+                    if(bitmapImage != null)
+                        imageView.setImageBitmap(bitmapImage);
                 }
             });
-            final ParseFile file = new ParseFile("image.jpg", bytes);
+            final Bitmap croppedBitmapImage = getCroppedBitmap(bitmapImage);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            croppedBitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] image = stream.toByteArray();
+            final ParseFile file = new ParseFile("image.jpg", image);
             file.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -971,6 +977,48 @@ public class Camera2BasicFragmentFront extends Fragment
                     }
                 }
             });
+        }
+
+        public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+            int width = bm.getWidth();
+            int height = bm.getHeight();
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
+            // CREATE A MATRIX FOR THE MANIPULATION
+            Matrix matrix = new Matrix();
+            // RESIZE THE BIT MAP
+            matrix.postScale(scaleWidth, scaleHeight);
+            // "RECREATE" THE NEW BITMAP
+            Bitmap resizedBitmap = Bitmap.createBitmap(
+                    bm, 0, 0, width, height, matrix, false);
+            bm.recycle();
+            return resizedBitmap;
+        }
+
+        public Bitmap getCroppedBitmap(Bitmap bitmap) {
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            mActivity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            Log.d("dimenScreen",String.valueOf(displaymetrics.widthPixels) + " " + String.valueOf(displaymetrics.heightPixels));
+            Log.d("dimenBitmap",String.valueOf(bitmap.getWidth()) + " " + String.valueOf(bitmap.getHeight()));
+            Log.d("dimenImageView",String.valueOf(imageView.getWidth()) + " " + String.valueOf(imageView.getHeight()));
+
+            Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(output);
+
+            final int color = 0xff424242;
+            final Paint paint = new Paint();
+            final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+            paint.setAntiAlias(true);
+            canvas.drawARGB(0, 0, 0, 0);
+            paint.setColor(color);
+            // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+            canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 4, paint);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            canvas.drawBitmap(bitmap, rect, rect, paint);
+            int w = output.getWidth(), h = output.getHeight();
+            output = Bitmap.createBitmap(output, w/4, (h-w/2)/2, w / 2, w / 2);
+            return output;
         }
 
     }

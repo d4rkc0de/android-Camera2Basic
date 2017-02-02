@@ -9,22 +9,24 @@
         android:layout_height="match_parent" />
 
     <com.example.android.camera2basic.AutoFitTextureView
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:id="@+id/texture"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_height="wrap_content" />
 
     <Button
+        android:layout_margin="40dp"
         android:layout_alignParentBottom="true"
         android:id="@+id/picture"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/picture" />
 
     <FrameLayout
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/margin_border">
