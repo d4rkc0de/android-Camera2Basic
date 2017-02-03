@@ -58,9 +58,11 @@ import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -259,7 +261,9 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(),getActivity()));
+            Log.d("rotationx", String.valueOf(getOrientation(0)));
+            Log.d("rotationx+90", String.valueOf(getOrientation(90)));
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(),mTextureView,getActivity(),getOrientation(0)));
             closeCamera();
         }
 
@@ -926,26 +930,36 @@ public class Camera2BasicFragment extends Fragment
          * The file we save the image into.
          */
         private Activity mActivity;
+        private TextureView mTextureView;
+        private int mRotate;
 
-        public ImageSaver(Image image,Activity activity) {
+        public ImageSaver(Image image, TextureView textureView,Activity activity,int rotate) {
             mImage = image;
             mActivity = activity;
+            mTextureView = textureView;
+            mRotate = rotate;
         }
 
         @Override
         public void run() {
+
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.capacity()];
             buffer.get(bytes);
-            final Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+            int newWidth = imageView.getWidth();
+            int newHeight = (bitmap.getHeight() * newWidth ) / bitmap.getWidth();
+            bitmap = getResizedBitmap(bitmap,newWidth,newHeight);
+
+            final Bitmap bitmapImage = flip(bitmap);
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(bitmapImage != null)
-                        imageView.setImageBitmap(bitmapImage);
+                    if(bitmapImage != null) imageView.setImageBitmap(bitmapImage);
                 }
             });
-            Bitmap croppedBitmapImage = getCroppedBitmap(bitmapImage);
+            final Bitmap croppedBitmapImage = getCroppedBitmap(bitmapImage);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             croppedBitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] image = stream.toByteArray();
@@ -973,9 +987,73 @@ public class Camera2BasicFragment extends Fragment
             });
         }
 
+        public Bitmap flip(Bitmap src) {
+
+            if(src.getWidth() > src.getHeight()) {
+                Matrix matrix2 = new Matrix();
+                matrix2.postRotate(270);
+                src = Bitmap.createScaledBitmap(src,src .getWidth(), src .getHeight(),true);
+                src = Bitmap.createBitmap(src , 0, 0, src .getWidth(), src .getHeight(), matrix2, true);
+            }
+
+            if(mRotate == 270) {
+                Matrix matrix = new Matrix();
+
+                matrix.postRotate(180);
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(src,src.getWidth(),src.getHeight(),true);
+
+                src = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+            }
+
+            if(mRotate == 180) {
+                Matrix matrix = new Matrix();
+
+                matrix.postRotate(0);
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(src,src.getWidth(),src.getHeight(),true);
+
+                src = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+            }
+
+            if(mRotate == 0) {
+                Matrix matrix = new Matrix();
+
+                matrix.postRotate(180);
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(src,src.getWidth(),src.getHeight(),true);
+
+                src = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+            }
+            return src;
+
+        }
+
+        public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+            int width = bm.getWidth();
+            int height = bm.getHeight();
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
+            // CREATE A MATRIX FOR THE MANIPULATION
+            Matrix matrix = new Matrix();
+            // RESIZE THE BIT MAP
+            matrix.postScale(scaleWidth, scaleHeight);
+            // "RECREATE" THE NEW BITMAP
+            Bitmap resizedBitmap = Bitmap.createBitmap(
+                    bm, 0, 0, width, height, matrix, false);
+            bm.recycle();
+            return resizedBitmap;
+        }
+
+
         public Bitmap getCroppedBitmap(Bitmap bitmap) {
-            Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                    bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            mActivity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            Log.d("dimenScreen",String.valueOf(displaymetrics.widthPixels) + " " + String.valueOf(displaymetrics.heightPixels));
+            Log.d("dimenBitmap",String.valueOf(bitmap.getWidth()) + " " + String.valueOf(bitmap.getHeight()));
+            Log.d("dimenImageView",String.valueOf(imageView.getWidth()) + " " + String.valueOf(imageView.getHeight()));
+
+            Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(output);
 
             final int color = 0xff424242;
@@ -986,12 +1064,18 @@ public class Camera2BasicFragment extends Fragment
             canvas.drawARGB(0, 0, 0, 0);
             paint.setColor(color);
             // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-            canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 4, paint);
+            int dp100 = convertDpToPixels(100,mActivity.getApplicationContext());
+            canvas.drawCircle( ((float) bitmap.getWidth()) / 2, ((float) bitmap.getHeight()) / 2, dp100, paint);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
             canvas.drawBitmap(bitmap, rect, rect, paint);
             int w = output.getWidth(), h = output.getHeight();
-            output = Bitmap.createBitmap(output, w/4, (h-w/2)/2, w / 2, w / 2);
+            //output = Bitmap.createBitmap(output, (w-dp100)/2 , (h-dp100)/2, dp100, dp100);
             return output;
+        }
+
+        public static int convertDpToPixels(float dp, Context context) {
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+            return px;
         }
 
     }

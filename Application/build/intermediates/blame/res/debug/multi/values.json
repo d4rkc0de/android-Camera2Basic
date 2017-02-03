@@ -4683,11 +4683,11 @@
                 "from": {
                     "file": "/Users/abdelnacer/work/testExample/camera/android-Camera2Basic/Application/src/main/res/values/styles.xml",
                     "position": {
-                        "startLine": 16,
+                        "startLine": 3,
                         "startColumn": 4,
-                        "startOffset": 645,
+                        "startOffset": 56,
                         "endColumn": 77,
-                        "endOffset": 718
+                        "endOffset": 129
                     }
                 }
             },

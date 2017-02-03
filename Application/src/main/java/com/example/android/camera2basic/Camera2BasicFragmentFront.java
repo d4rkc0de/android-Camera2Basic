@@ -62,6 +62,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -257,15 +258,14 @@ public class Camera2BasicFragmentFront extends Fragment
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
-    private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
-            = new ImageReader.OnImageAvailableListener() {
-
+    private final ImageReader.OnImageAvailableListener mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mTextureView,getActivity()));
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mTextureView,getActivity(),getOrientation(0) != 270));
+            Log.d("rotationxF", String.valueOf(getOrientation(0)));
+            Log.d("rotationxF+90", String.valueOf(getOrientation(90)));
             closeCamera();
         }
-
     };
 
     /**
@@ -931,10 +931,14 @@ public class Camera2BasicFragmentFront extends Fragment
          * The file we save the image into.
          */
         private Activity mActivity;
+        private TextureView mTextureView;
+        private boolean mRotate;
 
-        public ImageSaver(Image image, TextureView textureView,Activity activity) {
+        public ImageSaver(Image image, TextureView textureView,Activity activity,boolean rotate) {
             mImage = image;
             mActivity = activity;
+            mTextureView = textureView;
+            mRotate = rotate;
         }
 
         @Override
@@ -943,12 +947,16 @@ public class Camera2BasicFragmentFront extends Fragment
             byte[] bytes = new byte[buffer.capacity()];
             buffer.get(bytes);
 
-            final Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+            Bitmap bitmap = flip(BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null));
+            int newWidth = imageView.getWidth();
+            int newHeight = (bitmap.getHeight() * newWidth ) / bitmap.getWidth();
+            bitmap = getResizedBitmap(bitmap,newWidth,newHeight);
+
+            final Bitmap bitmapImage = bitmap;
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(bitmapImage != null)
-                        imageView.setImageBitmap(bitmapImage);
+                    if(bitmapImage != null) imageView.setImageBitmap(bitmapImage);
                 }
             });
             final Bitmap croppedBitmapImage = getCroppedBitmap(bitmapImage);
@@ -977,6 +985,24 @@ public class Camera2BasicFragmentFront extends Fragment
                     }
                 }
             });
+        }
+
+        public Bitmap flip(Bitmap src) {
+
+            if(src.getWidth() > src.getHeight()) {
+                Matrix matrix2 = new Matrix();
+                matrix2.postRotate(270);
+                src = Bitmap.createScaledBitmap(src,src .getWidth(), src .getHeight(),true);
+                src = Bitmap.createBitmap(src , 0, 0, src .getWidth(), src .getHeight(), matrix2, true);
+            }
+
+            //Matrix matrix = new Matrix();
+            //matrix.postRotate(180);
+            //Bitmap scaledBitmap = Bitmap.createScaledBitmap(src,src.getWidth(),src.getHeight(),true);
+            //src = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+
+            return src;
+
         }
 
         public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
@@ -1013,12 +1039,18 @@ public class Camera2BasicFragmentFront extends Fragment
             canvas.drawARGB(0, 0, 0, 0);
             paint.setColor(color);
             // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-            canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 4, paint);
+            int dp100 = convertDpToPixels(100,mActivity.getApplicationContext());
+            canvas.drawCircle( ((float) bitmap.getWidth()) / 2, ((float) bitmap.getHeight()) / 2, dp100, paint);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
             canvas.drawBitmap(bitmap, rect, rect, paint);
             int w = output.getWidth(), h = output.getHeight();
-            output = Bitmap.createBitmap(output, w/4, (h-w/2)/2, w / 2, w / 2);
+            //output = Bitmap.createBitmap(output, (w-dp100)/2 , (h-dp100)/2, dp100, dp100);
             return output;
+        }
+
+        public static int convertDpToPixels(float dp, Context context) {
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+            return px;
         }
 
     }

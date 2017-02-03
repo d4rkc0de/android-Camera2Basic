@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item>
-        <shape android:shape="rectangle" >
-            <solid android:color="#00000000" />
-        </shape>
-    </item>
     <item>
         <shape
-            android:innerRadiusRatio="4"
+            android:innerRadius="100dp"
             android:shape="ring"
             android:thicknessRatio="1"
             android:useLevel="false" >
             <solid android:color="#7277A5" />
         </shape>
     </item>
-
 </layer-list>
