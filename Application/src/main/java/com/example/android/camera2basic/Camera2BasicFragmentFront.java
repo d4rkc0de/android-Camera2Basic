@@ -1039,7 +1039,7 @@ public class Camera2BasicFragmentFront extends Fragment
             canvas.drawARGB(0, 0, 0, 0);
             paint.setColor(color);
             // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-            int dp100 = convertDpToPixels(100,mActivity.getApplicationContext());
+            int dp100 = displaymetrics.widthPixels / 4;//convertDpToPixels(100,mActivity.getApplicationContext());
             canvas.drawCircle( ((float) bitmap.getWidth()) / 2, ((float) bitmap.getHeight()) / 2, dp100, paint);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
             canvas.drawBitmap(bitmap, rect, rect, paint);

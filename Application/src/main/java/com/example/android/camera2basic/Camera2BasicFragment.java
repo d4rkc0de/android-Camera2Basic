@@ -948,7 +948,7 @@ public class Camera2BasicFragment extends Fragment
             buffer.get(bytes);
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
-            int newWidth = imageView.getWidth();
+            int newWidth = mTextureView.getWidth();
             int newHeight = (bitmap.getHeight() * newWidth ) / bitmap.getWidth();
             bitmap = getResizedBitmap(bitmap,newWidth,newHeight);
 
@@ -956,7 +956,8 @@ public class Camera2BasicFragment extends Fragment
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(bitmapImage != null) imageView.setImageBitmap(bitmapImage);
+                    if(bitmapImage != null)
+                        imageView.setImageBitmap(bitmapImage);
                 }
             });
             final Bitmap croppedBitmapImage = getCroppedBitmap(bitmapImage);
@@ -1064,7 +1065,7 @@ public class Camera2BasicFragment extends Fragment
             canvas.drawARGB(0, 0, 0, 0);
             paint.setColor(color);
             // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-            int dp100 = convertDpToPixels(100,mActivity.getApplicationContext());
+            int dp100 = displaymetrics.widthPixels / 4;//convertDpToPixels(100,mActivity.getApplicationContext());
             canvas.drawCircle( ((float) bitmap.getWidth()) / 2, ((float) bitmap.getHeight()) / 2, dp100, paint);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
             canvas.drawBitmap(bitmap, rect, rect, paint);

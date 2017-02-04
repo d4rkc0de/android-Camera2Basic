@@ -1981,7 +1981,7 @@ containing a value of this type.
         public static final int icon_group=0x7f0a006a;
         public static final int ifRoom=0x7f0a001f;
         public static final int image=0x7f0a0029;
-        public static final int imageView=0x7f0a0057;
+        public static final int imageView=0x7f0a0058;
         public static final int info=0x7f0a0067;
         public static final int line1=0x7f0a006c;
         public static final int line3=0x7f0a006e;
@@ -2034,7 +2034,7 @@ containing a value of this type.
         public static final int text=0x7f0a006f;
         public static final int text2=0x7f0a006d;
         public static final int textSpacerNoButtons=0x7f0a0037;
-        public static final int texture=0x7f0a0058;
+        public static final int texture=0x7f0a0057;
         public static final int time=0x7f0a0065;
         public static final int title=0x7f0a002d;
         public static final int title_template=0x7f0a0032;
