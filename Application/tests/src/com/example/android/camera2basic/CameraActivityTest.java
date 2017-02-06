@@ -28,6 +28,14 @@ public class CameraActivityTest {
 
         Thread.sleep(3000);
 
+        ViewInteraction button3 = onView(
+                allOf(withId(R.id.picture), withText("Picture"),
+                        isDisplayed()));
+        button3.perform(click());
+
+        Thread.sleep(3000);
+
+
         ViewInteraction button2 = onView(
                 allOf(withId(R.id.flip), withText("flip"),
                         isDisplayed()));
@@ -35,11 +43,10 @@ public class CameraActivityTest {
 
         Thread.sleep(3000);
 
-        ViewInteraction button3 = onView(
+        ViewInteraction button4 = onView(
                 allOf(withId(R.id.picture), withText("Picture"),
-                        withParent(withId(R.id.control)),
                         isDisplayed()));
-        button3.perform(click());
+        button4.perform(click());
     }
 
 }
