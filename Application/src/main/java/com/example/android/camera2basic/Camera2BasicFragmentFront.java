@@ -885,7 +885,7 @@ public class Camera2BasicFragmentFront extends Fragment
                         bmp = Bitmap.createBitmap(bmp , 0, 0, bmp.getWidth(), bmp.getHeight(), matrix2, true);
                     }
 
-                    bmp = getResizedBitmap(bmp,newWidth,newHeight);
+                    //bmp = getResizedBitmap(bmp,newWidth,newHeight);
                     bmp = flip(bmp);
                     final Bitmap bitmap;
                     bitmap = bmp;

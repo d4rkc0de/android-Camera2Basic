@@ -897,10 +897,11 @@ public class Camera2BasicFragment extends Fragment
                         e.printStackTrace();
                     }
                     Log.d("bitmapSizes",String.valueOf(bmp.getWidth() + " " + bmp.getHeight()));
+                    Log.d("bitmapSizes",String.valueOf(mTextureView.getWidth() + " " + mTextureView.getHeight()));
 
                     int newWidth = mTextureView.getWidth();
                     int newHeight = mTextureView.getWidth();//(bmp.getHeight() * newWidth ) / bmp.getWidth();
-                    bmp = getResizedBitmap(bmp,newWidth,newHeight);
+                    //bmp = getResizedBitmap(bmp,newWidth,newHeight);
 
                     final Bitmap bitmap;
                     bitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), mat, true);
